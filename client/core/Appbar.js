@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -11,6 +11,11 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Badge from '@material-ui/core/Badge';
 import HomePage from './HomePage'
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import auth from './../auth/auth-helper'
+import { Link, withRouter } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
 
 const useStyles = makeStyles(theme =>
     ({
@@ -68,11 +73,32 @@ const useStyles = makeStyles(theme =>
         },
     }),
 );
-const handleMobileMenuOpen = () => {
-    console.log("hello");
-}
+
+
+
 export default function MenuAppBar() {
+
     const classes = useStyles();
+
+    const [cartBadgeIcon, setCartBadgeIcon] = useState([])
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const addToCart = (index) => {
+
+        setCartBadgeIcon(cartBadgeIcon => [...cartBadgeIcon, index])
+        console.log(cartBadgeIcon);
+    }
+    const handleMobileMenuOpen = event => {
+        setAnchorEl(event.currentTarget);
+    }
+
+    const handleClick = event => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <div className={classes.root}>
@@ -109,22 +135,72 @@ export default function MenuAppBar() {
                     <div>
                         <IconButton color="inherit" onClick={handleMobileMenuOpen} >
                             <ShoppingCartIcon />
-                            <Badge badgeContent={4} color="secondary">
-                                <Typography>Cart</Typography>
+                            {cartBadgeIcon.length == 0 ?
 
-                            </Badge>
+                                <Typography>Cart</Typography>
+                                :
+
+                                <Badge badgeContent={cartBadgeIcon.length} color="secondary">
+                                    <Typography>Cart</Typography>
+
+
+
+                                </Badge>}
+
                         </IconButton>
                         <IconButton color="inherit" onClick={handleMobileMenuOpen} >
                             <AccountCircle />
                         </IconButton>
 
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            {
+                                !auth.isAuthenticated() && (<span>
+                                    <MenuItem>
+                                        <Link to="/signup">
+                                            <Button>Sign up
+                                     </Button>
+                                        </Link>
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <Link to="/signin">
+                                            <Button >Sign In
+                                </Button>
+                                        </Link>
+                                    </MenuItem>
+                                </span>)
+                            }
+                            {
+
+                                auth.isAuthenticated() && (<span>
+                                    <MenuItem>
+                                        <Link to={"/user/" + auth.isAuthenticated().user._id}>
+                                            <Button >My Profile</Button>
+                                        </Link>
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <Button color="inherit" onClick={() => {
+                                            auth.clearJWT(() => history.push('/'))
+                                        }}>Sign out</Button>
+                                    </MenuItem>
+                                </span>)
+                            }
+                            <MenuItem onClick={handleClose}>Close</MenuItem>
+                        </Menu>
+
+
 
                     </div>
                 </Toolbar>
             </AppBar>
-            <HomePage/>
+            <HomePage addToCart={addToCart} cartBadgeIcon={cartBadgeIcon} setCartBadgeIcon={setCartBadgeIcon} />
 
-            
+
         </div>
     )
 }

@@ -14,20 +14,28 @@ import Person from '@material-ui/icons/Person'
 import Divider from '@material-ui/core/Divider'
 import DeleteUser from './DeleteUser'
 import auth from './../auth/auth-helper'
-import {read} from './api-user.js'
-import {Redirect, Link} from 'react-router-dom'
+import { read } from './api-user.js'
+import { Redirect, Link } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
 
+import Grid from '@material-ui/core/Grid';
 const useStyles = makeStyles(theme => ({
-  root: theme.mixins.gutters({
-    maxWidth: 600,
-    margin: 'auto',
-    padding: theme.spacing(3),
-    marginTop: theme.spacing(5)
-  }),
+  paper: {
+    flexGrow: 1,
+    // margin: '20px',
+  },
   title: {
     marginTop: theme.spacing(3),
     color: theme.palette.protectedTitle
-  }
+  },
+  searchPaper: {
+    padding: theme.spacing(2),
+    // textAlign: 'center',
+    color: theme.palette.text.primary,
+    marginLeft: theme.spacing(1),
+    height:'-webkit-fill-available'
+    // marginRight: theme.spacing(1),
+  },
 }))
 
 export default function Profile({ match }) {
@@ -42,7 +50,7 @@ export default function Profile({ match }) {
 
     read({
       userId: match.params.userId
-    }, {t: jwt.token}, signal).then((data) => {
+    }, { t: jwt.token }, signal).then((data) => {
       if (data && data.error) {
         setRedirectToSignin(true)
       } else {
@@ -50,45 +58,35 @@ export default function Profile({ match }) {
       }
     })
 
-    return function cleanup(){
+    return function cleanup() {
       abortController.abort()
     }
 
   }, [match.params.userId])
-  
-    if (redirectToSignin) {
-      return <Redirect to='/signin'/>
-    }
-    return (
-      <Paper className={classes.root} elevation={4}>
-        <Typography variant="h6" className={classes.title}>
-          Profile
-        </Typography>
-        <List dense>
-          <ListItem>
-            <ListItemAvatar>
-              <Avatar>
-                <Person/>
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={user.name} secondary={user.email}/> {
-             auth.isAuthenticated().user && auth.isAuthenticated().user._id == user._id &&
-              (<ListItemSecondaryAction>
-                <Link to={"/user/edit/" + user._id}>
-                  <IconButton aria-label="Edit" color="primary">
-                    <Edit/>
-                  </IconButton>
-                </Link>
-                <DeleteUser userId={user._id}/>
-              </ListItemSecondaryAction>)
-            }
-          </ListItem>
-          <Divider/>
-          <ListItem>
-            <ListItemText primary={"Joined: " + (
-              new Date(user.created)).toDateString()}/>
-          </ListItem>
-        </List>
-      </Paper>
-    )
+
+  if (redirectToSignin) {
+    return <Redirect to='/signin' />
   }
+  return (
+    <>
+
+      
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={4} md={3} lg={2} xl={2}>
+            <Paper className={classes.searchPaper}>
+              <Button><Typography>Promotion</Typography></Button>
+              <br></br>
+              <Button><Typography>Orders</Typography></Button>
+              <br></br>
+              <Button><Typography>Products</Typography></Button>
+            </Paper>
+          </Grid></Grid>
+      
+
+    </>
+
+
+
+
+  )
+}
