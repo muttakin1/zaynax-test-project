@@ -102,6 +102,7 @@ export default function Profile({ match }) {
     if (redirectToSignin) {
         return <Redirect to='/signin' />
     }
+    
     return (
         <>
             <div className={classes.root}>
@@ -147,13 +148,13 @@ export default function Profile({ match }) {
                         </Link>
                         {
                             products.map((item, index) => (
+                               
                                 <Grid item xs={12} sm={4} md={2} lg={2} xl={2}>
                                     <Card className={classes.root}>
                                         <CardActionArea>
                                             <CardMedia
                                                 className={classes.media}
-                                                image="/static/images/cards/contemplative-reptile.jpg"
-
+                                                image={`/api/products/photo/${item._id}?${new Date().getTime()}`}
                                             />
                                             <CardContent>
                                                 <Typography gutterBottom variant="h5" component="h2">

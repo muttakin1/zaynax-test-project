@@ -66,13 +66,14 @@ export default function HomePage(props) {
         <Grid className={classes.root} container spacing={2}>
             {
                 products.map((item, index) => (
+                
                     <Grid className={classes.card} item xl={2} lg={2}>
+                      
                     <Card key={index}>
                         <CardActionArea onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
                             <CardMedia
                                 className={classes.media}
-                                image="/static/images/cards/contemplative-reptile.jpg"
-                                title="Contemplative Reptile"
+                                image={'/api/products/photo/'+item._id}
                             /> 
                             <Button onClick={()=>props.addToCart(index)} style={style} >Add to Cart</Button>
                             <CardContent>

@@ -142,10 +142,12 @@ export default function Profile({ match }) {
         productData.append('Product_Name', values.Product_Name)
         productData.append('Product_Price', values.Product_Price)
         productData.append('discount_rate', values.discount_rate)
-        postData.append('photo', values.photo)
+        productData.append('photo', values.photo)
 
-        create(
-            jwt.user._id,
+
+        create({
+            userId: jwt.user._id
+        },
             {
                 t: jwt.token,
             },
@@ -209,21 +211,14 @@ export default function Profile({ match }) {
                             {values.error}
                         </Typography>)
                         }<br></br>
-                        {/* <TextField
-                            placeholder="Share your thoughts ..."
-                            multiline
-                            rows="3"
-                            value={values.text}
-                            onChange={handleChange('text')}
-                            className={classes.textField}
-                            margin="normal"
-                        /> */}
+                       
+                    
                         <TextField
 
                             value={values.text}
-                            onChange={handleChange('text')}
+                            onChange={handleChange('Product_Name')}
                             className={classes.textField}
-                            id="outlined-required"
+                            
                             label="Product Name"
                             variant="outlined"
                             margin="normal"
@@ -231,9 +226,9 @@ export default function Profile({ match }) {
                         <TextField
 
                             value={values.text}
-                            onChange={handleChange('text')}
+                            onChange={handleChange('Product_Price')}
                             className={classes.textField}
-                            id="outlined-required"
+                           
                             label="Product Price (Before Discount)"
                             variant="outlined"
                             margin="normal"
@@ -241,9 +236,9 @@ export default function Profile({ match }) {
                         <TextField
 
                             value={values.text}
-                            onChange={handleChange('text')}
+                            onChange={handleChange('discount_rate')}
                             className={classes.textField}
-                            id="outlined-required"
+                            
                             label="Discount rate"
                             variant="outlined"
                             margin="normal"

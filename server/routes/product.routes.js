@@ -13,13 +13,19 @@ router.route('/api/products')
   // .post(productCtrl.create)
 
   router.route('/api/products/new/:userId')
-  .post(authCtrl.requireSignin, productCtrl.create)
-  
+  .post(productCtrl.create)
+
+  router.route('/api/products/photo/:productId')
+  .get(productCtrl.photo)
+
+
 // router.route('/api/expenses/:expenseId')
 //   // .get(authCtrl.requireSignin, expenseCtrl.read)
 //   .put(authCtrl.requireSignin, expenseCtrl.hasAuthorization, expenseCtrl.update)
 //   .delete(authCtrl.requireSignin, expenseCtrl.hasAuthorization, expenseCtrl.remove)
 
-// router.param('expenseId', ProductCtrl.expenseByID)
+router.param('productId', productCtrl.productById)
+
+// router.param('userId', userCtrl.userById)
 
 export default router

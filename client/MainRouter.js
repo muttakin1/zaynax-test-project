@@ -21,7 +21,7 @@ const MainRouter = () => {
         <Route path="/signin" component={Signin}/>
 
         <Route path="/user/productView/:userId" component={Products}/>
-        <Route path="/user/productForm" component={ProductForm}/>
+        <Route path="/user/productForm/" component={ProductForm}/>
 
         <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>
         <Route path="/user/:userId" component={Profile}/>

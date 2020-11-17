@@ -10,9 +10,9 @@ const list = async (signal) => {
     }
   }
 
-  const create = async (userId ,credentials, product) => {
+  const create = async (params ,credentials, product) => {
     try {
-      let response = await fetch('/api/products/new/'+ userId, {
+      let response = await fetch('/api/products/new/'+ params.userId, {
         method: 'POST',
         headers: {
           Accept: 'application/json',				
