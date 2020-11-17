@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { list } from './api-home'
 import Grid from '@material-ui/core/Grid';
-
+import { Link, withRouter } from 'react-router-dom'
 
 const useStyles = makeStyles({
     root: {
@@ -30,10 +30,12 @@ export default function HomePage(props) {
     const [style, setStyle] = useState({display: 'none'});
     
 
-    const abortController = new AbortController()
-    const signal = abortController.signal
+    
 
     useEffect(() => {
+
+        const abortController = new AbortController()
+        const signal = abortController.signal
 
         list(signal).then((data) => {
             if (data && data.error) {

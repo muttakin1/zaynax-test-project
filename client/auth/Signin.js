@@ -74,7 +74,7 @@ export default function Signin(props) {
   }
   const {redirectToReferrer} = values
   if (redirectToReferrer) {
-      return (<Redirect to={from}/>)
+      return (<Redirect to={'/user/' + auth.isAuthenticated().user._id}/>)
   }
 
   return (

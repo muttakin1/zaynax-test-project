@@ -17,6 +17,10 @@ import auth from './../auth/auth-helper'
 import { read } from './api-user.js'
 import { Redirect, Link } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import HomeIcon from '@material-ui/icons/Home';
+
 
 import Grid from '@material-ui/core/Grid';
 const useStyles = makeStyles(theme => ({
@@ -33,8 +37,17 @@ const useStyles = makeStyles(theme => ({
     // textAlign: 'center',
     color: theme.palette.text.primary,
     marginLeft: theme.spacing(1),
-    height:'-webkit-fill-available'
+    height: '-webkit-fill-available'
     // marginRight: theme.spacing(1),
+  },
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
   },
 }))
 
@@ -69,19 +82,40 @@ export default function Profile({ match }) {
   }
   return (
     <>
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+          <Link to="/">
+            <IconButton edge="start" className={classes.menuButton} style={{ color: "white" }}  aria-label="menu">
+              <HomeIcon />
+            </IconButton>
+            </Link>
+           
+            <Typography variant="h6" className={classes.title}>
+              Zaynax
+          </Typography>
+         
+         
+            <Button color="inherit">Login</Button>
+          </Toolbar>
+        </AppBar>
+      </div>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={4} md={3} lg={2} xl={2}>
+          <Paper className={classes.searchPaper}>
+            <Button><Typography>Promotion</Typography></Button>
+            <br></br>
+            <Button><Typography>Orders</Typography></Button>
+            <br></br>
+            <Link to={"/user/productView/"+ auth.isAuthenticated().user._id}>         
+               <Typography>Products</Typography>
+               </Link>
 
-      
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={4} md={3} lg={2} xl={2}>
-            <Paper className={classes.searchPaper}>
-              <Button><Typography>Promotion</Typography></Button>
-              <br></br>
-              <Button><Typography>Orders</Typography></Button>
-              <br></br>
-              <Button><Typography>Products</Typography></Button>
-            </Paper>
-          </Grid></Grid>
-      
+          </Paper>
+        </Grid>
+        
+        </Grid>
+
 
     </>
 
