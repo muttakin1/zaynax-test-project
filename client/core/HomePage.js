@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { list } from './api-home'
+import { list } from './api-Products'
 import Grid from '@material-ui/core/Grid';
 import { Link, withRouter } from 'react-router-dom'
 

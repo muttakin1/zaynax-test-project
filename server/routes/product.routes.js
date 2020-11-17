@@ -6,9 +6,15 @@ const router = express.Router()
 
 
 router.route('/api/products')
-  .post(productCtrl.create)
+  
   .get( productCtrl.read)
 
+  // router.route('/api/products')
+  // .post(productCtrl.create)
+
+  router.route('/api/products/new/:userId')
+  .post(authCtrl.requireSignin, productCtrl.create)
+  
 // router.route('/api/expenses/:expenseId')
 //   // .get(authCtrl.requireSignin, expenseCtrl.read)
 //   .put(authCtrl.requireSignin, expenseCtrl.hasAuthorization, expenseCtrl.update)

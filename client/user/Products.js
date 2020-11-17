@@ -20,7 +20,7 @@ import Button from '@material-ui/core/Button'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import HomeIcon from '@material-ui/icons/Home';
-import { list } from './../core/api-home'
+import { list } from '../core/api-Products'
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -140,7 +140,7 @@ export default function Profile({ match }) {
                 <Grid item xs={10} sm={10} md={9} lg={10} xl={10}>
                     <Paper>
 
-                        <Link to="/">
+                        <Link to={"/user/productForm/"}>
                             <Button className={classes.newButton} variant="contained" color="secondary ">
                                 Add New Product
                             </Button>

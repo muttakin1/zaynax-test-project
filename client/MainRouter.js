@@ -9,6 +9,7 @@ import Profile from './user/Profile'
 import PrivateRoute from './auth/PrivateRoute'
 import Menu from './core/Menu'
 import Products from './user/Products'
+import ProductForm from './user/ProductForm'
 
 const MainRouter = () => {
     return (<div>
@@ -20,6 +21,7 @@ const MainRouter = () => {
         <Route path="/signin" component={Signin}/>
 
         <Route path="/user/productView/:userId" component={Products}/>
+        <Route path="/user/productForm" component={ProductForm}/>
 
         <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>
         <Route path="/user/:userId" component={Profile}/>
