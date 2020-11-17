@@ -1,6 +1,6 @@
 import React from 'react'
 import {Route, Switch} from 'react-router-dom'
-import Home from './core/Home'
+import Home from './core/Appbar'
 import Users from './user/Users'
 import Signup from './user/Signup'
 import Signin from './auth/Signin'
