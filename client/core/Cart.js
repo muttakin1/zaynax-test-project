@@ -13,7 +13,7 @@ import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import auth from './../auth/auth-helper'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -35,7 +35,7 @@ export default function Cart(props) {
 
 
     const [cartProducts, setCartProducts] = useState(props.item)
-    const [checked, setChecked] = React.useState(true);
+    const [checked, setChecked] = React.useState(false);
     const [subtotal, setSubtotal] = useState(0)
     const [discount, setDiscount] = useState(0)
     const [shipping, setShipping] = useState(0)
@@ -57,11 +57,17 @@ export default function Cart(props) {
         console.log(event.target.checked);
     };
     const checkout = () => {
+        console.log(auth.isAuthenticated())
+        if(auth.isAuthenticated()){
         if (checked == false) {
             alert("You must agree to the terms and conditions, Privacy Policy and Refund Policy")
         }
         else{
             alert("Your order has been placed")
+        }
+        }
+        else {
+            alert("You must sign up/Sign in")
         }
     };
 
