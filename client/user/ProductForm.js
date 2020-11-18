@@ -29,6 +29,12 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 import PhotoCamera from '@material-ui/icons/PhotoCamera'
 import TextField from '@material-ui/core/TextField'
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -50,8 +56,8 @@ const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
     },
-    root1:{
-        height:"500px"
+    root1: {
+        height: "500px"
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -76,6 +82,12 @@ const useStyles = makeStyles(theme => ({
     input: {
         display: 'none',
     },
+    save: {
+        color: 'red',
+        '&$checked': {
+          color: 'blue',
+        },
+      },
 }))
 
 export default function Profile({ match }) {
@@ -83,7 +95,8 @@ export default function Profile({ match }) {
 
     const [user, setUser] = useState({})
     const [redirectToSignin, setRedirectToSignin] = useState(false)
-    const [products, setProducts] = useState([])
+    const [checked, setChecked] = useState(false)
+
     const [values, setValues] = useState({
         Product_Name: '',
         Product_Price: '',
@@ -101,27 +114,7 @@ export default function Profile({ match }) {
 
         setValues({ ...values, user: auth.isAuthenticated().user })
 
-        // read({
-        //     userId: match.params.userId
-        // }, { t: jwt.token }, signal).then((data) => {
-        //     if (data && data.error) {
-        //         setRedirectToSignin(true)
-        //     } else {
-        //         setUser(data)
-        //     }
-        // })
-
-        // list(signal).then((data) => {
-        //     if (data && data.error) {
-        //         console.log(data.error)
-        //     } else {
-        //         console.log(data);
-        //         setProducts(data)
-        //     }
-        // })
-        // return function cleanup() {
-        //     abortController.abort()
-        // }
+        
 
     }, [])
 
@@ -133,6 +126,16 @@ export default function Profile({ match }) {
             ? event.target.files[0]
             : event.target.value
         setValues({ ...values, [name]: value })
+    }
+    const handleCheckChange =(event)=>{
+       console.log(event.target.chec);
+        // if(checked==true){
+        //     setChecked(false)
+        // }
+        // else if(checked==false){
+        //     setChecked(true)
+        // }
+        
     }
 
     const clickSubmit = () => {
@@ -201,6 +204,7 @@ export default function Profile({ match }) {
                 <Grid item xs={10} sm={10} md={9} lg={10} xl={10}>
                     <Paper className={classes.root1}>
                         <input accept="image/*" onChange={handleChange('photo')} className={classes.input} id="icon-button-file" type="file" />
+
                         <label htmlFor="icon-button-file">
                             <IconButton color="secondary" className={classes.photoButton} component="span">
                                 <PhotoCamera />
@@ -211,14 +215,14 @@ export default function Profile({ match }) {
                             {values.error}
                         </Typography>)
                         }<br></br>
-                       
-                    
+
+
                         <TextField
 
                             value={values.text}
                             onChange={handleChange('Product_Name')}
                             className={classes.textField}
-                            
+
                             label="Product Name"
                             variant="outlined"
                             margin="normal"
@@ -228,7 +232,7 @@ export default function Profile({ match }) {
                             value={values.text}
                             onChange={handleChange('Product_Price')}
                             className={classes.textField}
-                           
+
                             label="Product Price (Before Discount)"
                             variant="outlined"
                             margin="normal"
@@ -238,13 +242,24 @@ export default function Profile({ match }) {
                             value={values.text}
                             onChange={handleChange('discount_rate')}
                             className={classes.textField}
-                            
+
                             label="Discount rate"
                             variant="outlined"
                             margin="normal"
                         />
-
-
+                        <br></br>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={checked}
+                                    onChange={handleCheckChange}
+                                   
+                                    className={classes.save}
+                                />
+                            }
+                            label="Active"
+                        />
+                        <br></br>
                         <Button
                             color="primary"
                             variant="contained"

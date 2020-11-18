@@ -16,6 +16,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import auth from './../auth/auth-helper'
 import { Link, withRouter } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
+import Cart from './Cart'
 
 const useStyles = makeStyles(theme =>
     ({
@@ -83,11 +84,14 @@ export default function MenuAppBar() {
     const [cartBadgeIcon, setCartBadgeIcon] = useState([])
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [cartItem, setCartItem] = useState([]);
+    const [showCart, setShowCart] = useState(false);
 
-    const addToCart = (index) => {
+    const addToCart = (item, index) => {
 
         setCartBadgeIcon(cartBadgeIcon => [...cartBadgeIcon, index])
-        console.log(cartBadgeIcon);
+        setCartItem(cartItem => [...cartItem, item])
+        console.log(cartItem);
     }
     const handleMobileMenuOpen = event => {
         setAnchorEl(event.currentTarget);
@@ -99,6 +103,12 @@ export default function MenuAppBar() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const visitCart = () => {
+        setShowCart(true);
+    };
+     const showHome = () => {
+        setShowCart(false);
+    }
 
     return (
         <div className={classes.root}>
@@ -133,21 +143,29 @@ export default function MenuAppBar() {
 
                     </div>
                     <div>
-                        <IconButton color="inherit" onClick={handleMobileMenuOpen} >
-                            <ShoppingCartIcon />
-                            {cartBadgeIcon.length == 0 ?
 
+                        {cartBadgeIcon.length == 0 ?
+                            <IconButton color="inherit"  >
+                                <ShoppingCartIcon />
                                 <Typography>Cart</Typography>
-                                :
+                            </IconButton>
+                            :
 
+                            <IconButton onClick={visitCart} >
+
+                                <ShoppingCartIcon />
                                 <Badge badgeContent={cartBadgeIcon.length} color="secondary">
                                     <Typography>Cart</Typography>
 
 
 
-                                </Badge>}
+                                </Badge>
 
-                        </IconButton>
+                            </IconButton>
+
+                        }
+
+
                         <IconButton color="inherit" onClick={handleMobileMenuOpen} >
                             <AccountCircle />
                         </IconButton>
@@ -198,7 +216,14 @@ export default function MenuAppBar() {
                     </div>
                 </Toolbar>
             </AppBar>
-            <HomePage addToCart={addToCart} cartBadgeIcon={cartBadgeIcon} setCartBadgeIcon={setCartBadgeIcon} />
+
+            {
+                showCart == false ?
+                    <HomePage addToCart={addToCart} cartBadgeIcon={cartBadgeIcon} setCartBadgeIcon={setCartBadgeIcon} />
+                    :
+                    <Cart item={cartItem} showHome={showHome}> </Cart>
+            }
+
 
 
         </div>

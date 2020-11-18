@@ -11,6 +11,7 @@ import { list } from './api-Products'
 import Grid from '@material-ui/core/Grid';
 import { Link, withRouter } from 'react-router-dom'
 
+
 const useStyles = makeStyles({
     root: {
         padding:'40px'
@@ -67,15 +68,16 @@ export default function HomePage(props) {
             {
                 products.map((item, index) => (
                 
-                    <Grid className={classes.card} item xl={2} lg={2}>
+                    <Grid key={index} className={classes.card} item xl={2} lg={2}>
                       
-                    <Card key={index}>
+                    <Card >
                         <CardActionArea onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
                             <CardMedia
                                 className={classes.media}
                                 image={'/api/products/photo/'+item._id}
                             /> 
-                            <Button onClick={()=>props.addToCart(index)} style={style} >Add to Cart</Button>
+
+                            <Button onClick={()=>props.addToCart(item,index)} style={style} >Add to Cart  </Button>
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="h2">
                                     {item.Product_Name}

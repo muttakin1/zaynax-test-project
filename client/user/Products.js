@@ -129,7 +129,7 @@ export default function Profile({ match }) {
 
                 <Grid item xs={2} sm={2} md={3} lg={2} xl={2}>
                     <Paper className={classes.searchPaper}>
-                        <Button><Typography>Hello</Typography></Button>
+                        <Button><Typography>Promotion</Typography></Button>
                         <br></br>
                         <Button><Typography>Orders</Typography></Button>
                         <br></br>

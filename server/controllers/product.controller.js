@@ -15,12 +15,7 @@ const create = async (req, res) => {
       })
     }
     let product = new Product(fields)
-    //console.log(fields)
-    // product.Product_Name= JSON.parse(fields.Product_Name)
-    // product.Product_Price= JSON.parse(fields.Product_Price)
-    // product.discount_rate= JSON.parse(fields.discount_rate)
   
-
     if (files.photo) {
       product.photo.data = fs.readFileSync(files.photo.path)
       product.photo.contentType = files.photo.type
@@ -63,7 +58,7 @@ const productById = async (req, res, next, id) => {
         error: "product not found"
       })
     req.product = product
-    console.log(req.product);
+    
     next()
   }catch(err){
     console.log(err)
