@@ -12,6 +12,8 @@ import { list } from './api-Products'
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Checkbox from '@material-ui/core/Checkbox';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -33,34 +35,58 @@ export default function Cart(props) {
 
 
     const [cartProducts, setCartProducts] = useState(props.item)
-    // const goBack = () => {
-    //     props.setShowcart(false)
-    // }
+    const [checked, setChecked] = React.useState(true);
     const [subtotal, setSubtotal] = useState(0)
+    const [discount, setDiscount] = useState(0)
+    const [shipping, setShipping] = useState(0)
+    const [totalPrice, setTotalPrice] = useState(0)
 
     const deleteProduct = (index) => {
         const tempProducts = [...cartProducts];
 
-        // removing the element using splice
+
         tempProducts.splice(index, 1);
 
-        // updating the list
+
         setCartProducts(tempProducts)
 
 
-
-
-
     }
+    const handleChange = (event) => {
+        setChecked(event.target.checked);
+        console.log(event.target.checked);
+    };
+    const checkout = () => {
+        if (checked == false) {
+            alert("You must agree to the terms and conditions, Privacy Policy and Refund Policy")
+        }
+        else{
+            alert("Your order has been placed")
+        }
+    };
+
 
     useEffect(() => {
-        var subTotalCalculator = 0
-        cartProducts.map((item, index) => (
+        let subTotalCalculator = 0;
+        let discountCalculator = 0;
+        let shippingCalculator = 0;
+
+        cartProducts.map((item, index) => {
 
             subTotalCalculator = subTotalCalculator + parseInt(item.Product_Price.toString())
-        ))
+            discountCalculator = discountCalculator + parseInt(item.discount_rate.toString())
+            shippingCalculator = shippingCalculator + item.shipping_Charge
+
+        })
 
         setSubtotal(subTotalCalculator)
+        
+        discountCalculator=(discountCalculator/100)*subTotalCalculator
+      
+        setDiscount(discountCalculator)
+        setShipping(shippingCalculator)
+
+        setTotalPrice(subTotalCalculator+shippingCalculator-discountCalculator)
 
     }, [])
 
@@ -75,7 +101,7 @@ export default function Cart(props) {
             <Button onClick={() => props.showHome(true)} variant="contained" style={{ marginBottom: 30 }}>Go Back</Button>
 
             <br></br>
-            {  console.log(subtotal)}
+
             <Grid container spacing={2}>
                 <Grid item xl={9} lg={9} >
 
@@ -122,9 +148,27 @@ export default function Cart(props) {
                         </Card>
 
                     ))}
+                    <Grid container spacing ={1}>
+                        <Grid item >
+                            <Checkbox
+                                checked={checked}
+                                onChange={handleChange}
+                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                            />
+                        </Grid>
+                        <Grid item xl={8}>
+                            
+                            <Typography style={{paddingTop:'10px'}}>I agree to the terms and conditions, Privacy Policy and Refund Policy</Typography>
+                        </Grid>
+                        <Grid item>
+                            <Button onClick={checkout} variant="contained" color="primary"> Checkout </Button>
 
+                        </Grid>
+                    </Grid>
 
+                
                 </Grid>
+
                 <Grid item xl={3} lg={3}>
                     <Card>
                         <Typography gutterBottom variant="h5">
@@ -135,10 +179,10 @@ export default function Cart(props) {
                             Subtotal: {subtotal}
                         </Typography>
                         <Typography variant="h6" color="TextPrimary" component="p">
-                            Discount:
+                            Discount: {discount}
                         </Typography>
                         <Typography variant="h6" color="TextPrimary" component="p">
-                            Shipping charge:
+                            Shipping charge: {shipping}
                         </Typography>
                         <Divider></Divider>
                         <TextField
@@ -150,7 +194,7 @@ export default function Cart(props) {
                         </Button>
                         <Divider></Divider>
                         <Typography variant="h6" color="TextPrimary" component="p">
-                            Total Payable:
+                            Total Payable: {totalPrice}
                         </Typography>
                     </Card>
                 </Grid>

@@ -34,6 +34,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import Switch from '@material-ui/core/Switch';
 
 
 const useStyles = makeStyles(theme => ({
@@ -105,10 +106,10 @@ export default function Profile({ match }) {
         error: '',
         shipping_Charge: '',
         Active: '',
-        Color:'',
-        Size:'',
+        Color: '',
+        Size: '',
         user: {},
-        redirect:false
+        redirect: false
     })
 
     const jwt = auth.isAuthenticated()
@@ -126,7 +127,7 @@ export default function Profile({ match }) {
     if (values.redirect) {
         return <Redirect to={'/user/productView/' + auth.isAuthenticated().user._id} />
     }
-    
+
     const handleChange = name => event => {
         const value = name === 'photo'
             ? event.target.files[0]
@@ -134,7 +135,7 @@ export default function Profile({ match }) {
         setValues({ ...values, [name]: value })
     }
     const handleCheckChange = (event) => {
-        console.log(event.target.chec);
+        setChecked(event.target.checked);
         // if(checked==true){
         //     setChecked(false)
         // }
@@ -154,7 +155,7 @@ export default function Profile({ match }) {
         productData.append('shipping_Charge', values.shipping_Charge)
         productData.append('Color', values.Color)
         productData.append('Size', values.Size)
-        // productData.append('Active', values.Active)
+        productData.append('Active', checked)
         productData.append('photo', values.photo)
 
 
@@ -287,16 +288,20 @@ export default function Profile({ match }) {
 
                         <br></br>
                         <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={checked}
-                                    onChange={handleCheckChange}
-
-                                    className={classes.save}
-                                />
-                            }
+        control={<Switch checked={checked} onChange={handleCheckChange}  name="checkedA" />}
+        label="Active"
+      />
+                        {/* <FormControlLabel
+                            control={<Checkbox checked={checked}  onChange={handleCheckChange} name="checkedA" />}
                             label="Active"
-                        />
+                        /> */}
+
+                        {/* <Checkbox
+                            label={"Active"}
+                            checked={checked}
+                            onChange={handleCheckChange}
+                            inputProps={{ 'aria-label': 'primary checkbox' }}
+                        /> */}
                         <br></br>
                         <Button
                             color="primary"

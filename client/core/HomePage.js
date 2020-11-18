@@ -67,7 +67,7 @@ export default function HomePage(props) {
         <Grid className={classes.root} container spacing={2}>
             {
                 products.map((item, index) => (
-                
+                item.Active==true? 
                     <Grid key={index} className={classes.card} item xl={2} lg={2}>
                       
                     <Card >
@@ -99,6 +99,8 @@ export default function HomePage(props) {
 
                     </Card>
                     </Grid >
+                    :
+                    <></>
                 ))
             }
        </Grid >
