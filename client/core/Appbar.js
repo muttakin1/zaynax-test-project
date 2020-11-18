@@ -93,6 +93,8 @@ export default function MenuAppBar() {
         setCartItem(cartItem => [...cartItem, item])
         console.log(cartItem);
     }
+    
+
     const handleMobileMenuOpen = event => {
         setAnchorEl(event.currentTarget);
     }
@@ -221,7 +223,7 @@ export default function MenuAppBar() {
                 showCart == false ?
                     <HomePage addToCart={addToCart} cartBadgeIcon={cartBadgeIcon} setCartBadgeIcon={setCartBadgeIcon} />
                     :
-                    <Cart item={cartItem} showHome={showHome}> </Cart>
+                    <Cart item={cartItem}  showHome={showHome} cartBadgeIcon={cartBadgeIcon} setCartBadgeIcon={setCartBadgeIcon}>   </Cart>
             }
 
 
