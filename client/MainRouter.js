@@ -10,6 +10,7 @@ import PrivateRoute from './auth/PrivateRoute'
 import Menu from './core/Menu'
 import Products from './user/Products'
 import ProductForm from './user/ProductForm'
+import EditProduct from './user/EditProduct'
 
 
 const MainRouter = () => {
@@ -23,6 +24,8 @@ const MainRouter = () => {
        
         <Route path="/user/productView/:userId" component={Products}/>
         <Route path="/user/productForm/" component={ProductForm}/>
+
+        <PrivateRoute path="/editProductForm/:productId" component={EditProduct}/>
 
         <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>
         <Route path="/user/:userId" component={Profile}/>

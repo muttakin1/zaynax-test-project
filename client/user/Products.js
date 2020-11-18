@@ -29,6 +29,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles(theme => ({
+    
     paper: {
         flexGrow: 1,
         // margin: '20px',
@@ -47,6 +48,7 @@ const useStyles = makeStyles(theme => ({
     },
     root: {
         flexGrow: 1,
+        
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -59,7 +61,10 @@ const useStyles = makeStyles(theme => ({
     },
     newButton:{
         margin: theme.spacing(2)
-    }
+    },
+    card:{
+        height:'400'
+        },
 }))
 
 export default function Profile({ match }) {
@@ -146,11 +151,15 @@ export default function Profile({ match }) {
                                 Add New Product
                             </Button>
                         </Link>
+                        <Grid container spacing={3}>
+
                         {
                             products.map((item, index) => (
                                
                                 <Grid item xs={12} sm={4} md={2} lg={2} xl={2}>
-                                    <Card className={classes.root}>
+                                    <Link to={"/editProductForm/"+item._id}><Button>Edit</Button></Link>
+                                    <Card className={classes.card}>
+                                    
                                         <CardActionArea>
                                             <CardMedia
                                                 className={classes.media}
@@ -168,7 +177,7 @@ export default function Profile({ match }) {
                                                     </Grid>
                                                     <Grid item xl={2} lg={2}>
                                                         <Typography variant="body2" color="textSecondary" component="p">
-                                                            {item.discount_rate}
+                                                            {item.discount_rate}%
                                                         </Typography>
                                                     </Grid>
                                                 </Grid>
@@ -180,6 +189,7 @@ export default function Profile({ match }) {
                                 </Grid>
                             ))
                         }
+                        </Grid>
                     </Paper>
                 </Grid>
 

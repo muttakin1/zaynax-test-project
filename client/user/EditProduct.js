@@ -20,7 +20,7 @@ import Button from '@material-ui/core/Button'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import HomeIcon from '@material-ui/icons/Home';
-import { list, create } from '../core/api-Products'
+import { list, readProductsByID,updateProductsByID } from '../core/api-Products'
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -91,7 +91,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-export default function Profile({ match }) {
+export default function EditProduct(props) {
     const classes = useStyles()
 
     const [user, setUser] = useState({})
@@ -112,13 +112,32 @@ export default function Profile({ match }) {
         redirect: false
     })
 
-    const jwt = auth.isAuthenticated()
+   
 
     useEffect(() => {
+        const jwt = auth.isAuthenticated()
+        let token = auth.isAuthenticated().token
+
         const abortController = new AbortController()
         const signal = abortController.signal
 
         setValues({ ...values, user: auth.isAuthenticated().user })
+       
+        readProductsByID(props.match.params.productId, signal, token).then(
+            (data) => {
+                if (data && data.error) {
+                    console.log(data.error);
+                } else {
+                    
+                    console.log(data)
+                    setValues(data)
+                 
+                }
+            },
+        )
+        return function cleanup() {
+            abortController.abort()
+        }
 
 
 
@@ -135,13 +154,8 @@ export default function Profile({ match }) {
         setValues({ ...values, [name]: value })
     }
     const handleCheckChange = (event) => {
-        setChecked(event.target.checked);
-        // if(checked==true){
-        //     setChecked(false)
-        // }
-        // else if(checked==false){
-        //     setChecked(true)
-        // }
+       setValues({ ...values,Active:event.target.checked})
+     
 
     }
 
@@ -156,27 +170,40 @@ export default function Profile({ match }) {
         productData.append('Color', values.Color)
         productData.append('Size', values.Size)
         productData.append('Active', checked)
-        productData.append('photo', values.photo)
 
+       
+        if(typeof(values.photo)=="object"){
+            console.log('not appending', values.photo)
+          } 
+        else if (values.photo != undefined) {
+            console.log('appending')
+            productData.append('photo', values.photo)
+          }
+      
+          else {
+            console.log('not appending', values.photo)
+          }
 
-        create({
-            userId: jwt.user._id
-        },
-            {
-                t: jwt.token,
-            },
-            productData,
-        ).then((data) => {
-            if (data.error) {
-                setValues({ ...values, error: data.error })
+        const jwt = auth.isAuthenticated()
+        let token = auth.isAuthenticated().token
+
+        updateProductsByID(props.match.params.productId, token, productData).then(
+            (data) => {
+              if (data.error) {
                 console.log(data.error)
-
-            } else {
-                setValues({ ...values, error: '', redirect: true })
-
-            }
-        })
+                setValues({ ...values, error: data.error })
+               
+              } else {
+                console.log('updating recipes')
+                setValues({ ...values, error: ''})
+                console.log(values)
+                
+              }
+            },
+        )
+        
     }
+
     return (
         <>
             <div className={classes.root}>
@@ -230,7 +257,7 @@ export default function Profile({ match }) {
 
                         <TextField
 
-                            value={values.text}
+                            value={values.Product_Name}
                             onChange={handleChange('Product_Name')}
                             className={classes.textField}
 
@@ -240,7 +267,7 @@ export default function Profile({ match }) {
                         />
                         <TextField
 
-                            value={values.text}
+                            value={values.Product_Price}
                             onChange={handleChange('Product_Price')}
                             className={classes.textField}
 
@@ -250,7 +277,7 @@ export default function Profile({ match }) {
                         />
                         <TextField
 
-                            value={values.text}
+                            value={values.discount_rate}
                             onChange={handleChange('discount_rate')}
                             className={classes.textField}
 
@@ -260,7 +287,7 @@ export default function Profile({ match }) {
                         />
                         <TextField
 
-                            value={values.text}
+                            value={values.shipping_Charge}
                             onChange={handleChange('shipping_Charge')}
                             className={classes.textField}
                             label="Shipping Charge"
@@ -269,7 +296,7 @@ export default function Profile({ match }) {
                         />
                         <TextField
 
-                            value={values.text}
+                            value={values.Color}
                             onChange={handleChange('Color')}
                             className={classes.textField}
                             label="Color"
@@ -278,7 +305,7 @@ export default function Profile({ match }) {
                         />
                         <TextField
 
-                            value={values.text}
+                            value={values.Size}
                             onChange={handleChange('Size')}
                             className={classes.textField}
                             label="Size"
@@ -288,9 +315,9 @@ export default function Profile({ match }) {
 
                         <br></br>
                         <FormControlLabel
-        control={<Switch checked={checked} onChange={handleCheckChange}  name="checkedA" />}
-        label="Active"
-      />
+                            control={<Switch checked={values.Active} onChange={handleCheckChange} name="checkedA" />}
+                            label="Active"
+                        />
                         {/* <FormControlLabel
                             control={<Checkbox checked={checked}  onChange={handleCheckChange} name="checkedA" />}
                             label="Active"

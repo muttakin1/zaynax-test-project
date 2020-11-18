@@ -48,6 +48,10 @@ const read = async (req, res) => {
       }
 }
 
+const readAll = (req, res) => {
+  return res.json(req.product)
+}
+
 const productById = async (req, res, next, id) => {
   
   try{
@@ -77,10 +81,42 @@ const photo = (req, res, next) => {
   
 }
 
+const update = async (req, res) => {
+  
+  let form = new formidable.IncomingForm()
+  form.keepExtensions = true
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      return res.status(400).json({
+        error: 'Photo could not be uploaded',
+      })
+    }
+    let products = req.product
+
+    console.log(fields)
+    products = extend(products, fields)
+    if (files.photo) {
+      products.photo.data = fs.readFileSync(files.photo.path)
+      products.photo.contentType = files.photo.type
+    }
+    try {
+      await products.save()
+      res.json(products)
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({
+        error: errorHandler.getErrorMessage(err),
+      })
+    }
+  })
+}
+
 export default {
     create,
     photo,
     read,
-    productById
+    readAll,
+    productById,
+    update
     
 }

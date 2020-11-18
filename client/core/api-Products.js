@@ -26,10 +26,40 @@ const list = async (signal) => {
     }
   };
   
-  
+  const readProductsByID = async (productId, signal,t) => {
+    try {
+      let response = await fetch('/api/products/' + productId, {
+        method: 'GET',
+        signal: signal,
+        Authorization: 'Bearer ' + t,
+      });
+      return await response.json();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updateProductsByID = async (productId, t, products) => {
+    try {
+      let response = await fetch('/api/products/' + productId, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          Authorization: 'Bearer ' + t,
+        },
+        body:products,
+      });
+      return await response.json();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   export {
     
     list,
-    create
+    create,
+    readProductsByID,
+    updateProductsByID
    
   }
