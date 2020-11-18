@@ -5,13 +5,22 @@ const ProductsSchema = new mongoose.Schema({
         type: String, required: true
     },
     Product_Price: {
-        type: String, required: true
+        type: Number, required: true
     },
     discount_rate: {
-        type: String, required: true
+        type: Number, required: true
     },
     Active: {
-        type: Boolean
+        type: Boolean, 
+    },
+    shipping_Charge: {
+        type: Number, required: true
+    },
+    Color: {
+        type: String,
+    },
+    Size: {
+        type: String,
     },
     photo: {
         data: Buffer,

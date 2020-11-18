@@ -57,7 +57,7 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
     },
     root1: {
-        height: "500px"
+        height: "650px"
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -85,9 +85,9 @@ const useStyles = makeStyles(theme => ({
     save: {
         color: 'red',
         '&$checked': {
-          color: 'blue',
+            color: 'blue',
         },
-      },
+    },
 }))
 
 export default function Profile({ match }) {
@@ -103,7 +103,12 @@ export default function Profile({ match }) {
         discount_rate: '',
         photo: '',
         error: '',
-        user: {}
+        shipping_Charge: '',
+        Active: '',
+        Color:'',
+        Size:'',
+        user: {},
+        redirect:false
     })
 
     const jwt = auth.isAuthenticated()
@@ -114,28 +119,29 @@ export default function Profile({ match }) {
 
         setValues({ ...values, user: auth.isAuthenticated().user })
 
-        
+
 
     }, [])
 
-    if (redirectToSignin) {
+    if (values.redirect) {
         return <Redirect to={'/user/productView/' + auth.isAuthenticated().user._id} />
     }
+    
     const handleChange = name => event => {
         const value = name === 'photo'
             ? event.target.files[0]
             : event.target.value
         setValues({ ...values, [name]: value })
     }
-    const handleCheckChange =(event)=>{
-       console.log(event.target.chec);
+    const handleCheckChange = (event) => {
+        console.log(event.target.chec);
         // if(checked==true){
         //     setChecked(false)
         // }
         // else if(checked==false){
         //     setChecked(true)
         // }
-        
+
     }
 
     const clickSubmit = () => {
@@ -145,6 +151,10 @@ export default function Profile({ match }) {
         productData.append('Product_Name', values.Product_Name)
         productData.append('Product_Price', values.Product_Price)
         productData.append('discount_rate', values.discount_rate)
+        productData.append('shipping_Charge', values.shipping_Charge)
+        productData.append('Color', values.Color)
+        productData.append('Size', values.Size)
+        // productData.append('Active', values.Active)
         productData.append('photo', values.photo)
 
 
@@ -247,13 +257,41 @@ export default function Profile({ match }) {
                             variant="outlined"
                             margin="normal"
                         />
+                        <TextField
+
+                            value={values.text}
+                            onChange={handleChange('shipping_Charge')}
+                            className={classes.textField}
+                            label="Shipping Charge"
+                            variant="outlined"
+                            margin="normal"
+                        />
+                        <TextField
+
+                            value={values.text}
+                            onChange={handleChange('Color')}
+                            className={classes.textField}
+                            label="Color"
+                            variant="outlined"
+                            margin="normal"
+                        />
+                        <TextField
+
+                            value={values.text}
+                            onChange={handleChange('Size')}
+                            className={classes.textField}
+                            label="Size"
+                            variant="outlined"
+                            margin="normal"
+                        />
+
                         <br></br>
                         <FormControlLabel
                             control={
                                 <Checkbox
                                     checked={checked}
                                     onChange={handleCheckChange}
-                                   
+
                                     className={classes.save}
                                 />
                             }
