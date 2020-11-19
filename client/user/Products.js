@@ -141,7 +141,9 @@ export default function Profile({ match }) {
                         </Link>
                         <br></br>
                         <Link to={"/user/productView/" + auth.isAuthenticated().user._id}>
+                        <Button>
                             <Typography>Products</Typography>
+                        </Button>
                         </Link>
                     </Paper>
                 </Grid>

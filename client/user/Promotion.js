@@ -75,7 +75,7 @@ export default function Promotion({ match }) {
       abortController.abort()
     }
 
-  }, [match.params.userId])
+  }, [])
 
   if (redirectToSignin) {
     return <Redirect to='/signin' />
@@ -122,8 +122,14 @@ export default function Promotion({ match }) {
           </Paper>
         </Grid>
         
+        <Grid item xs={12} sm={8} md={9} lg={10} xl={10}>
+        <Paper className={classes.searchPaper}>
+        <Typography>Promotion</Typography> 
+        </Paper>
         </Grid>
-
+         
+        </Grid>
+        
 
     </>
 
