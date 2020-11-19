@@ -36,6 +36,7 @@ import { list } from './../core/api-order'
 
 
 import Grid from '@material-ui/core/Grid';
+import { set } from 'lodash'
 const useStyles = makeStyles(theme => ({
     paper: {
         flexGrow: 1,
@@ -90,11 +91,27 @@ export default function Profile({ match }) {
     const [viewCancelledOrders, setViewCancelledOrders] = useState(false)
     const jwt = auth.isAuthenticated()
 
-    const confirmOrder = () => {
-        console.log("order confirmed");
+    const confirmOrder = (item,index) => {
+    
+        item.status="Confirmed"
+        setConfirmedOrders(confirmedOrders => [...confirmedOrders, item])
+        const tempOrders = [...pendingOrders];
+
+
+        tempOrders.splice(index, 1);
+
+
+        setPendingOrders(tempOrders)
+       
     }
-    const cancelOrder = () => {
-        console.log("order cancelled");
+
+    const cancelOrder = (item,index) => {
+        item.status="Cancelled"
+        setCancelledOrders(cancelledOrders => [...cancelledOrders, item])
+        const tempOrders = [...pendingOrders];
+        tempOrders.splice(index, 1);
+        setPendingOrders(tempOrders)
+       
     }
     const AllOrders = () => {
         setViewConfirmedOrders(false)
@@ -178,8 +195,8 @@ export default function Profile({ match }) {
                     <TableCell align="right">
                         {item.status == 'Pending' ?
                             <>
-                                <Button onClick={confirmOrder} variant="contained" className={classes.confirmButton} color="primary">Confirm</Button>
-                                <Button onClick={cancelOrder} variant="contained" color="secondary">Cancel</Button>
+                                <Button onClick={()=>confirmOrder(item,index)} variant="contained" className={classes.confirmButton} color="primary">Confirm</Button>
+                                <Button onClick={()=>cancelOrder(item,index)} variant="contained" color="secondary">Cancel</Button>
                             </>
                             :
                             <></>
@@ -206,8 +223,8 @@ export default function Profile({ match }) {
                     <TableCell align="right">
                         {item.status == 'Pending' ?
                             <>
-                                <Button onClick={confirmOrder} variant="contained" className={classes.confirmButton} color="primary">Confirm</Button>
-                                <Button onClick={cancelOrder} variant="contained" color="secondary">Cancel</Button>
+                                <Button onClick={()=>confirmOrder(item,index)} variant="contained" className={classes.confirmButton} color="primary">Confirm</Button>
+                                <Button onClick={()=>cancelOrder(item,index)} variant="contained" color="secondary">Cancel</Button>
                             </>
                             :
                             <></>
@@ -232,14 +249,7 @@ export default function Profile({ match }) {
                     <TableCell align="right">{item.orderNumber}</TableCell>
                     <TableCell align="right">{item.Price}</TableCell>
                     <TableCell align="right">
-                        {item.status == 'Pending' ?
-                            <>
-                                <Button onClick={confirmOrder} variant="contained" className={classes.confirmButton} color="primary">Confirm</Button>
-                                <Button onClick={cancelOrder} variant="contained" color="secondary">Cancel</Button>
-                            </>
-                            :
-                            <></>
-                        }
+                        
                     </TableCell>
                     <TableCell align="right">{item.status}</TableCell>
                 </TableRow>
@@ -260,14 +270,7 @@ export default function Profile({ match }) {
                 <TableCell align="right">{item.orderNumber}</TableCell>
                 <TableCell align="right">{item.Price}</TableCell>
                 <TableCell align="right">
-                    {item.status == 'Pending' ?
-                        <>
-                            <Button onClick={confirmOrder} variant="contained" className={classes.confirmButton} color="primary">Confirm</Button>
-                            <Button onClick={cancelOrder} variant="contained" color="secondary">Cancel</Button>
-                        </>
-                        :
-                        <></>
-                    }
+                   
                 </TableCell>
                 <TableCell align="right">{item.status}</TableCell>
             </TableRow>
