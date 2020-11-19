@@ -136,7 +136,9 @@ export default function Profile({ match }) {
                     <Paper className={classes.searchPaper}>
                         <Button><Typography>Promotion</Typography></Button>
                         <br></br>
+                        <Link to={"/user/orders/" + auth.isAuthenticated().user._id}>
                         <Button><Typography>Orders</Typography></Button>
+                        </Link>
                         <br></br>
                         <Link to={"/user/productView/" + auth.isAuthenticated().user._id}>
                             <Typography>Products</Typography>

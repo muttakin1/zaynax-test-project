@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function Profile({ match }) {
+export default function Promotion({ match }) {
   const classes = useStyles()
   const [user, setUser] = useState({})
   const [redirectToSignin, setRedirectToSignin] = useState(false)
@@ -61,15 +61,15 @@ export default function Profile({ match }) {
     const abortController = new AbortController()
     const signal = abortController.signal
 
-    read({
-      userId: match.params.userId
-    }, { t: jwt.token }, signal).then((data) => {
-      if (data && data.error) {
-        setRedirectToSignin(true)
-      } else {
-        setUser(data)
-      }
-    })
+    // read({
+    //   userId: match.params.userId
+    // }, { t: jwt.token }, signal).then((data) => {
+    //   if (data && data.error) {
+    //     setRedirectToSignin(true)
+    //   } else {
+    //     setUser(data)
+    //   }
+    // })
 
     return function cleanup() {
       abortController.abort()

@@ -61,15 +61,15 @@ export default function Profile({ match }) {
     const abortController = new AbortController()
     const signal = abortController.signal
 
-    read({
-      userId: match.params.userId
-    }, { t: jwt.token }, signal).then((data) => {
-      if (data && data.error) {
-        setRedirectToSignin(true)
-      } else {
-        setUser(data)
-      }
-    })
+    // read({
+    //   userId: match.params.userId
+    // }, { t: jwt.token }, signal).then((data) => {
+    //   if (data && data.error) {
+    //     setRedirectToSignin(true)
+    //   } else {
+    //     setUser(data)
+    //   }
+    // })
 
     return function cleanup() {
       abortController.abort()

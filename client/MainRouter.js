@@ -11,7 +11,8 @@ import Menu from './core/Menu'
 import Products from './user/Products'
 import ProductForm from './user/ProductForm'
 import EditProduct from './user/EditProduct'
-
+import Order from './user/Order'
+import Promotion from './user/Promotion'
 
 const MainRouter = () => {
     return (<div>
@@ -24,8 +25,10 @@ const MainRouter = () => {
        
         <Route path="/user/productView/:userId" component={Products}/>
         <Route path="/user/productForm/" component={ProductForm}/>
-
         <PrivateRoute path="/editProductForm/:productId" component={EditProduct}/>
+
+        <Route path="/user/orders/" component={Order}/>
+        <Route path="/user/promotions/" component={Promotion}/>
 
         <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>
         <Route path="/user/:userId" component={Profile}/>
