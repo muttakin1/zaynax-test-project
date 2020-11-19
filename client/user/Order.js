@@ -31,7 +31,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-
+import { list } from './../core/api-order'
 
 
 
@@ -70,32 +70,89 @@ const useStyles = makeStyles(theme => ({
         marginTop: '20px',
         height: '80px'
     },
-    confirmButton:{
-        marginRight:'10px'
+    confirmButton: {
+        marginRight: '10px'
     }
 }))
 
 export default function Profile({ match }) {
     const classes = useStyles()
-    const [user, setUser] = useState({})
+    const [orders, setOrders] = useState([])
+    const [confirmedOrders, setConfirmedOrders] = useState([])
+
+    const [pendingOrders, setPendingOrders] = useState([])
+    const [cancelledOrders, setCancelledOrders] = useState([])
     const [redirectToSignin, setRedirectToSignin] = useState(false)
+
+    const [viewPending, setViewPending] = useState(false)
+    const [viewAllOrders, setViewAllOrders] = useState(true)
+    const [viewConfirmedOrders, setViewConfirmedOrders] = useState(false)
+    const [viewCancelledOrders, setViewCancelledOrders] = useState(false)
     const jwt = auth.isAuthenticated()
-    
+
+    const confirmOrder = () => {
+        console.log("order confirmed");
+    }
+    const cancelOrder = () => {
+        console.log("order cancelled");
+    }
+    const AllOrders = () => {
+        setViewConfirmedOrders(false)
+        setViewPending(false)
+        setViewAllOrders(true)
+        setViewCancelledOrders(false)
+    }
+
+    const ViewPendingOrdersFn = () => {
+        setViewConfirmedOrders(false)
+        setViewPending(true)
+        setViewAllOrders(false)
+        setViewCancelledOrders(false)
+    }
+    const ViewConfirmedOrdersFn = () => {
+        
+        setViewConfirmedOrders(true)
+        setViewPending(false)
+        setViewAllOrders(false)
+        setViewCancelledOrders(false)
+    }
+    const ViewCancelledOrdersFn = () => {
+        
+        setViewConfirmedOrders(false)
+        setViewPending(false)
+        setViewAllOrders(false)
+        setViewCancelledOrders(true)
+    }
 
     useEffect(() => {
 
         const abortController = new AbortController()
         const signal = abortController.signal
 
-        // read({
-        //   userId: match.params.userId
-        // }, { t: jwt.token }, signal).then((data) => {
-        //   if (data && data.error) {
-        //     setRedirectToSignin(true)
-        //   } else {
-        //     setUser(data)
-        //   }
-        // })
+        list(signal).then((data) => {
+            if (data && data.error) {
+                console.log(data.error);
+            } else {
+                console.log(data);
+                setOrders(data)
+
+                data.map((item) => {
+                    if (item.status == 'Confirmed') {
+
+                        setConfirmedOrders(confirmedOrders => [...confirmedOrders, item])
+                    }
+                    else if (item.status == 'Pending') {
+                        setPendingOrders(pendingOrders => [...pendingOrders, item])
+                    }
+                    else if (item.status == 'Cancelled') {
+                        setCancelledOrders(cancelledOrders => [...cancelledOrders, item])
+                        
+                    }
+                }
+                )
+
+            }
+        });
 
         return function cleanup() {
             abortController.abort()
@@ -106,6 +163,121 @@ export default function Profile({ match }) {
     if (redirectToSignin) {
         return <Redirect to='/signin' />
     }
+    var tableRows
+    if (viewAllOrders == true) {
+        tableRows=orders.map((item, index) =>
+
+            <TableBody>
+
+                <TableRow key="name">
+                    <TableCell component="th" scope="row">
+                        {index + 1}
+                    </TableCell>
+                    <TableCell align="right">{item.orderNumber}</TableCell>
+                    <TableCell align="right">{item.Price}</TableCell>
+                    <TableCell align="right">
+                        {item.status == 'Pending' ?
+                            <>
+                                <Button onClick={confirmOrder} variant="contained" className={classes.confirmButton} color="primary">Confirm</Button>
+                                <Button onClick={cancelOrder} variant="contained" color="secondary">Cancel</Button>
+                            </>
+                            :
+                            <></>
+                        }
+                    </TableCell>
+                    <TableCell align="right">{item.status}</TableCell>
+                </TableRow>
+
+            </TableBody>
+
+        )
+    }
+    else if (viewPending == true) {
+        tableRows=  pendingOrders.map((item, index) =>
+
+            <TableBody>
+
+                <TableRow key="name">
+                    <TableCell component="th" scope="row">
+                        {index + 1}
+                    </TableCell>
+                    <TableCell align="right">{item.orderNumber}</TableCell>
+                    <TableCell align="right">{item.Price}</TableCell>
+                    <TableCell align="right">
+                        {item.status == 'Pending' ?
+                            <>
+                                <Button onClick={confirmOrder} variant="contained" className={classes.confirmButton} color="primary">Confirm</Button>
+                                <Button onClick={cancelOrder} variant="contained" color="secondary">Cancel</Button>
+                            </>
+                            :
+                            <></>
+                        }
+                    </TableCell>
+                    <TableCell align="right">{item.status}</TableCell>
+                </TableRow>
+
+            </TableBody>
+
+        )
+    }
+    else if (viewConfirmedOrders == true) {
+        tableRows= confirmedOrders.map((item, index) =>
+
+            <TableBody>
+
+                <TableRow key="name">
+                    <TableCell component="th" scope="row">
+                        {index + 1}
+                    </TableCell>
+                    <TableCell align="right">{item.orderNumber}</TableCell>
+                    <TableCell align="right">{item.Price}</TableCell>
+                    <TableCell align="right">
+                        {item.status == 'Pending' ?
+                            <>
+                                <Button onClick={confirmOrder} variant="contained" className={classes.confirmButton} color="primary">Confirm</Button>
+                                <Button onClick={cancelOrder} variant="contained" color="secondary">Cancel</Button>
+                            </>
+                            :
+                            <></>
+                        }
+                    </TableCell>
+                    <TableCell align="right">{item.status}</TableCell>
+                </TableRow>
+
+            </TableBody>
+
+        )
+    }
+    else if(viewCancelledOrders == true){
+        tableRows= cancelledOrders.map((item, index) =>
+
+        <TableBody>
+
+            <TableRow key="name">
+                <TableCell component="th" scope="row">
+                    {index + 1}
+                </TableCell>
+                <TableCell align="right">{item.orderNumber}</TableCell>
+                <TableCell align="right">{item.Price}</TableCell>
+                <TableCell align="right">
+                    {item.status == 'Pending' ?
+                        <>
+                            <Button onClick={confirmOrder} variant="contained" className={classes.confirmButton} color="primary">Confirm</Button>
+                            <Button onClick={cancelOrder} variant="contained" color="secondary">Cancel</Button>
+                        </>
+                        :
+                        <></>
+                    }
+                </TableCell>
+                <TableCell align="right">{item.status}</TableCell>
+            </TableRow>
+
+        </TableBody>
+
+    ) 
+    }
+    
+
     return (
         <>
             <div className={classes.root}>
@@ -151,7 +323,7 @@ export default function Profile({ match }) {
                     <Grid container spacing={3}>
                         <Grid item xs={12} sm={4} md={2} lg={2} xl={2}>
                             <Card className={classes.card}>
-                                <CardActionArea>
+                                <CardActionArea onClick={AllOrders}>
                                     <CardContent>
                                         <Typography className={classes.title1} color="textPrimary">
                                             All Orders
@@ -162,7 +334,7 @@ export default function Profile({ match }) {
                         </Grid>
                         <Grid item xs={12} sm={4} md={2} lg={2} xl={2}>
                             <Card className={classes.card}>
-                                <CardActionArea>
+                                <CardActionArea onClick={ViewPendingOrdersFn}>
                                     <CardContent>
                                         <Typography className={classes.title1} color="textPrimary">
                                             Pending
@@ -173,7 +345,7 @@ export default function Profile({ match }) {
                         </Grid>
                         <Grid item xs={12} sm={4} md={2} lg={2} xl={2}>
                             <Card className={classes.card}>
-                                <CardActionArea>
+                                <CardActionArea  onClick={ViewConfirmedOrdersFn}>
                                     <CardContent>
                                         <Typography className={classes.title1} color="textPrimary">
                                             Confirmed
@@ -184,7 +356,7 @@ export default function Profile({ match }) {
                         </Grid>
                         <Grid item xs={12} sm={4} md={2} lg={2} xl={2}>
                             <Card className={classes.card}>
-                                <CardActionArea>
+                                <CardActionArea onClick={ViewCancelledOrdersFn}>
                                     <CardContent>
                                         <Typography className={classes.title1} color="textPrimary">
                                             Cancelled
@@ -195,7 +367,7 @@ export default function Profile({ match }) {
                         </Grid>
                     </Grid>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} sm={4} md={2} lg={10} xl={10}>
+                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                             <TableContainer component={Paper}>
                                 <Table className={classes.table} aria-label="simple table">
                                     <TableHead>
@@ -207,19 +379,9 @@ export default function Profile({ match }) {
                                             <TableCell align="right">Status</TableCell>
                                         </TableRow>
                                     </TableHead>
-                                    <TableBody>
-                                      
-                                            <TableRow key="name">
-                                                <TableCell component="th" scope="row">
-                                                    name
-                                                </TableCell>
-                                                <TableCell align="right">calories</TableCell>
-                                                <TableCell align="right">row.fat</TableCell>
-                                                <TableCell align="right"><Button variant="contained" className={classes.confirmButton}color="primary">Confirm</Button><Button variant="contained" color="secondary">Cancel</Button></TableCell>
-                                                <TableCell align="right">row.protein</TableCell>
-                                            </TableRow>
-                                        
-                                    </TableBody>
+                                    {tableRows}
+
+
                                 </Table>
                             </TableContainer>
                         </Grid>
