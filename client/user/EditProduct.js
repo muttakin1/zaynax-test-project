@@ -154,7 +154,8 @@ export default function EditProduct(props) {
         setValues({ ...values, [name]: value })
     }
     const handleCheckChange = (event) => {
-       setValues({ ...values,Active:event.target.checked})
+
+       setValues({ ...values, Active:event.target.checked})
      
 
     }
@@ -169,7 +170,7 @@ export default function EditProduct(props) {
         productData.append('shipping_Charge', values.shipping_Charge)
         productData.append('Color', values.Color)
         productData.append('Size', values.Size)
-        productData.append('Active', checked)
+        productData.append('Active', values.Active)
 
        
         if(typeof(values.photo)=="object"){
@@ -194,7 +195,7 @@ export default function EditProduct(props) {
                 setValues({ ...values, error: data.error })
                
               } else {
-                console.log('updating recipes')
+                
                 setValues({ ...values, error: ''})
                 console.log(values)
                 
