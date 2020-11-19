@@ -8,7 +8,12 @@ const router = express.Router();
 router
 	.route('/api/order')
 	.post(authCtrl.requireSignin,orderCtrl.create)
-    .get(orderCtrl.list);
+	.get(orderCtrl.list);
+	
+router
+	.route('/api/order/:orderId')
+	.get(orderCtrl.read)
+	.put(authCtrl.requireSignin, orderCtrl.update)
     
 router.param('orderId', orderCtrl.orderById);
 router.param('userId', userCtrl.userByID);

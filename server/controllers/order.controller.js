@@ -54,6 +54,7 @@ const list = async (req, res) => {
 	}
 };
 const update = async (req, res) => {
+	console.log("controller");
 	try {
 		let order = req.order;
 		order = extend(order, req.body);
@@ -61,6 +62,7 @@ const update = async (req, res) => {
 		await order.save();
 		res.json(order);
 	} catch (error) {
+		console.log(error);
 		return res.status(400).json({
 			error: errorHandler.getErrorMessage(error),
 		});

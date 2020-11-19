@@ -26,6 +26,23 @@ const list = async (signal) => {
 		console.log(err);
 	}
 };
+const updateOrderById = async (params, credentials, order) => {
+	console.log("api");
+	try {
+		let response = await fetch('/api/order/' + params, {
+			method: 'PUT',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + credentials,
+			},
+			body: JSON.stringify(order),
+		});
+		return await response.json();
+	} catch (err) {
+		console.log(err);
+	}
+};
   
 
-export { create,list};
+export { create,list,updateOrderById};

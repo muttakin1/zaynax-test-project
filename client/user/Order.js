@@ -31,7 +31,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { list } from './../core/api-order'
+import { list,updateOrderById } from './../core/api-order'
 
 
 
@@ -91,6 +91,9 @@ export default function Profile({ match }) {
     const [viewCancelledOrders, setViewCancelledOrders] = useState(false)
     const jwt = auth.isAuthenticated()
 
+   
+    
+
     const confirmOrder = (item,index) => {
     
         item.status="Confirmed"
@@ -102,6 +105,18 @@ export default function Profile({ match }) {
 
 
         setPendingOrders(tempOrders)
+        // updateOrderById(item._id,jwt,item)+
+        updateOrderById(item._id, jwt.token, item).then((data) => {
+            if (data.error) {
+              //console.log(data.error);
+            //   setValues({ ...values, error: data.error });
+              //setError(data.error)
+            } else {
+              console.log(data);
+              //setValues({ ...values, error: '', redirect: true });
+             
+            }
+          });
        
     }
 
@@ -111,8 +126,22 @@ export default function Profile({ match }) {
         const tempOrders = [...pendingOrders];
         tempOrders.splice(index, 1);
         setPendingOrders(tempOrders)
+        
+        updateOrderById(item._id, jwt.token, item).then((data) => {
+            if (data.error) {
+              //console.log(data.error);
+            //   setValues({ ...values, error: data.error });
+              //setError(data.error)
+            } else {
+              console.log(data);
+              //setValues({ ...values, error: '', redirect: true });
+             
+            }
+          });
+
        
     }
+    
     const AllOrders = () => {
         setViewConfirmedOrders(false)
         setViewPending(false)
