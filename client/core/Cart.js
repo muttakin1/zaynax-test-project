@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Checkbox from '@material-ui/core/Checkbox';
 import auth from './../auth/auth-helper'
+import {create} from './api-order'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -41,6 +42,8 @@ export default function Cart(props) {
     const [shipping, setShipping] = useState(0)
     const [totalPrice, setTotalPrice] = useState(0)
 
+    let jwt = auth.isAuthenticated().token;
+
     const deleteProduct = (index) => {
         const tempProducts = [...cartProducts];
 
@@ -56,14 +59,32 @@ export default function Cart(props) {
         setChecked(event.target.checked);
         console.log(event.target.checked);
     };
+
     const checkout = () => {
+
         console.log(auth.isAuthenticated())
         if(auth.isAuthenticated()){
         if (checked == false) {
             alert("You must agree to the terms and conditions, Privacy Policy and Refund Policy")
         }
+
         else{
-            alert("Your order has been placed")
+
+            const order ={
+                Price:totalPrice
+            };
+         
+
+            create(order, jwt).then((data) => {
+                if (data.error) {
+                    console.log(data.error);
+                    // setValues({ ...values, error: data.error });
+                } else {
+                    // setValues({ ...values, error: '', redirect: true });
+                    alert("Your order has been placed")
+                }
+            });
+           
         }
         }
         else {
